@@ -76,7 +76,7 @@ void	matrix_add(Matrix  *m1, Matrix *m2)
 		i++;
 	}
 }
-Matrix * matrix_sub(Matrix *m1, Matrix *m2)
+Matrix	*matrix_sub(Matrix *m1, Matrix *m2)
 {
 	Matrix *result;
 	int	i;
@@ -94,7 +94,20 @@ Matrix * matrix_sub(Matrix *m1, Matrix *m2)
 	}
 	return result;
 }
-Matrix *matrix_dot(Matrix *m1,Matrix *m2)
+void	matrix_scale(Matrix *m, double n)
+{
+	int	i;
+	int	total_element;
+
+	i = 0;
+	total_element = m->rows * m->cols;
+	while (i < total_element)
+	{
+		m ->data[i] *= n;
+		i++;
+	}
+}
+Matrix	*matrix_dot(Matrix *m1,Matrix *m2)
 {
 	Matrix *result;
 	int	i;
@@ -139,6 +152,40 @@ Matrix *matrix_transpose(Matrix *m)
 			result->data[(j * result ->cols) + i ]= m->data[(i * m->cols) + j];
 			j++;
 		}
+	i++;
+	}
+	return result;
+}
+Matrix *matrix_copy(Matrix *m)
+{
+	Matrix	*result;
+	int	i;
+	int	total_element;
+
+	result = matrix_create(m->rows, m->cols);
+	i = 0;
+	total_element = m->rows * m->cols;
+	while (i < total_element)
+	{
+		result ->data[i] = m->data[i];
+		i++;
+	}
+	return  result;
+}
+Matrix	*matrix_multiply_elementwise(Matrix *m1, Matrix *m2)
+{
+	Matrix *result;
+	int i;
+	int total_element;
+
+	if (m1->rows != m2->rows || m1->cols != m2->cols)
+		return NULL;
+	result = matrix_create(m1->rows, m1->cols);
+	i = 0;
+	total_element = m1->rows * m1->cols;
+	while(i < total_element)
+	{
+		result->data[i] = m1->data[i] * m2->data[i];
 		i++;
 	}
 	return result;
